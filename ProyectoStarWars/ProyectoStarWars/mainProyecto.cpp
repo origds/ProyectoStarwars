@@ -1,6 +1,6 @@
 #include "Ogre\Ogre.h"
 #include "OIS\OIS.h"
-
+#include "torreta.h"
 
 class AppFrameListener : public Ogre::FrameListener
 {
@@ -180,7 +180,9 @@ class cAplicacion {
 
 		Ogre::Entity* entPosTorretas = _sceneManager->createEntity("proyectoStarW_mod_torretas.mesh");
 		_sceneManager->getRootSceneNode()->attachObject(entPosTorretas);
-
+		
+		Torreta torre = Torreta(0.0, 0.0, 0.0, 0.0, -20.0, 0.0);
+		torre.initTorreta(_sceneManager);
 
 	}
 
