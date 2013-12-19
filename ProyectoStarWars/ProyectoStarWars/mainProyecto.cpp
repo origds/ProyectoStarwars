@@ -160,6 +160,8 @@ class cAplicacion {
 // funcion donde se coloca lo que se desea desplegar.
 	void createScene(){
 
+		_sceneManager->setSkyDome(true, "Examples/SpaceSkyPlane",5,8);
+
 		Ogre::Entity* entEscena01 = _sceneManager->createEntity("proyectoStarW_mod_01.mesh");
 		_sceneManager->getRootSceneNode()->attachObject(entEscena01);
 
@@ -181,9 +183,26 @@ class cAplicacion {
 		Ogre::Entity* entPosTorretas = _sceneManager->createEntity("proyectoStarW_mod_torretas.mesh");
 		_sceneManager->getRootSceneNode()->attachObject(entPosTorretas);
 		
-		Torreta torre = Torreta(0.0, 0.0, 0.0, 0.0, -20.0, 0.0);
-		torre.initTorreta(_sceneManager);
+		// Torretas
 
+		Torreta torre1 = Torreta(0.0, 0.0, 0.0, -22.0, -7.0, -228.0);
+		torre1.initTorreta1(_sceneManager);
+
+		Torreta torre2 = Torreta(0.0, 0.0, 0.0, 22.0, -7.0, -408.0);
+		torre2.initTorreta2(_sceneManager);
+
+		Torreta torre3 = Torreta(0.0, 0.0, 0.0, -22.0, -7.0, -638.0);
+		torre3.initTorreta3(_sceneManager);
+
+		Torreta torre4 = Torreta(0.0, 0.0, 0.0, 22.0, -7.0, -883.0);
+		torre4.initTorreta4(_sceneManager);
+
+		// Luz
+
+		_sceneManager->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
+
+		Ogre::Light* luz = _sceneManager->createLight("MainLight");
+		luz->setPosition(20,80,50);
 	}
 
 

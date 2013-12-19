@@ -116,9 +116,11 @@
   <ItemGroup>
     <ClCompile Include="mainProyecto.cpp" />
     <ClCompile Include="torreta.cpp" />
+    <ClCompile Include="xwing.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="torreta.h" />
+    <ClInclude Include="xwing.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

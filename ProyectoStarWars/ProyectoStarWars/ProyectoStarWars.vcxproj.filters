@@ -21,9 +21,15 @@
     <ClCompile Include="torreta.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
+    <ClCompile Include="xwing.cpp">
+      <Filter>Archivos de código fuente</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="torreta.h">
+      <Filter>Archivos de código fuente</Filter>
+    </ClInclude>
+    <ClInclude Include="xwing.h">
       <Filter>Archivos de código fuente</Filter>
     </ClInclude>
   </ItemGroup>
