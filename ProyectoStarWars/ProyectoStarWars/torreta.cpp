@@ -146,11 +146,14 @@ void Torreta::initTorreta1(Ogre::SceneManager* _sceneManager) {
 		nodoTorito81->attachObject(entTorito81);
 		nodoTorito81->scale(0.06f,0.06f,0.06f);
 
-		Ogre::SceneNode* nodoLaser11 = nodoCanion11->createChildSceneNode();	
+		Ogre::SceneNode* nodoLaser11 = _sceneManager->createSceneNode("NodeLaser11");
+		_sceneManager->getRootSceneNode()->addChild(nodoLaser11);	
 		Ogre::Entity* entLaser11 = _sceneManager->createEntity("Laser11","usb_laser.mesh");
-		nodoLaser11->translate(Ogre::Vector3(5.0, 5.4, 6.5));
+		entLaser11->setMaterialName("Examples/Laser");
 		nodoLaser11->attachObject(entLaser11);
-		nodoLaser11->scale(0.06f,0.06f,0.06f);
+		nodoLaser11->scale(0.1f,0.1f,0.1f);
+	//	nodoLaser11->roll(0.1f,0.1f,0.1f);
+
 }
 
 void Torreta::initTorreta3(Ogre::SceneManager* _sceneManager) {

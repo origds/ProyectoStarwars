@@ -1,7 +1,10 @@
-/*#include "Ogre/ogre.h"
+#include "Ogre/ogre.h"
 #include "OIS/ois.h"
 #include "xwing.h"
 
+Xwing::Xwing() {
+
+}
 Xwing::Xwing(float x, float y, float z, Ogre::SceneManager* _sceneManager){
   xpos = x;
   ypos = y;
@@ -14,17 +17,19 @@ Xwing::Xwing(float x, float y, float z, Ogre::SceneManager* _sceneManager){
 
   //Initializing nodes
   main = _sceneManager->createSceneNode("NodeXwing");
-
+  _sceneManager->getRootSceneNode()->addChild(main);
   //Rotating Nodes for Wings
-  leftUpperNode = main->createChildSceneNode("leftUpperNode");
-  leftLowerNode = main->createChildSceneNode("leftLoweroode");
-  rightUpperNode = main->createChildSceneNode("rightUpperNode");
-  rightLowerNode = main->createChildSceneNode("rightLowerNode");
+  leftUpperNode = _sceneManager->createSceneNode("leftUpperNode");
+  main->addChild(leftUpperNode);
+  
+  leftLowerNode = _sceneManager->createSceneNode("leftLoweroode");
+  main->addChild(leftLowerNode);
+  
+  rightUpperNode = _sceneManager->createSceneNode("rightUpperNode");
+  main->addChild(rightUpperNode);
 
-  leftUpperNode->translate(-2.8,0.1,0.0);
-  leftLowerNode->translate(-2.8,-0.1,0.0);
-  rightUpperNode->translate(2.8,0.1,0.0);
-  rightLowerNode->translate(2.8,-0.1,0.0);
+  rightLowerNode = _sceneManager->createSceneNode("rightLowerNode");
+  main->addChild(rightLowerNode);
 
   //Body
   initBackBody(_sceneManager);
@@ -39,24 +44,27 @@ Xwing::Xwing(float x, float y, float z, Ogre::SceneManager* _sceneManager){
   initLeftUpperFrontEngine(_sceneManager);
   initLeftLowerFrontEngine(_sceneManager);
   initRightUpperFrontEngine(_sceneManager);
-  initLeftLowerFrontEngine(_sceneManager);
+  initRightLowerFrontEngine(_sceneManager);
   initLeftUpperBackEngine(_sceneManager);
   initLeftLowerBackEngine(_sceneManager);
   initRightUpperBackEngine(_sceneManager);
-  initLeftLowerBackEngine(_sceneManager);
+  initRightLowerBackEngine(_sceneManager);
   //Cannons Entities
   initLeftUpperCannon(_sceneManager);
   initLeftLowerCannon(_sceneManager);
   initRightUpperCannon(_sceneManager);
-  initLeftLowerCannon(_sceneManager);
+  initRightLowerCannon(_sceneManager);
   //Extra Entity()
   initR2d2(_sceneManager);
 
-  _sceneManager->getRootSceneNode()->addChild(main);
+  leftUpperNode->translate(-2.8,0.1,0.0);
+  leftLowerNode->translate(-2.8,-0.1,0.0);
+  rightUpperNode->translate(2.8,0.1,0.0);
+  rightLowerNode->translate(2.8,-0.1,0.0);
+
 }
 
 Xwing::~Xwing(){
-
 }
 
 void Xwing::initXwing(float x, float y, float z){
@@ -71,7 +79,7 @@ void Xwing::moveForward(){
   if ((zpos - 1.0) >= -800.0) {
     zpos -= 1.0;
     main->translate(0.0,0.0,-1.0);
-  } else {}
+  } else {
     zpos = 0.0;
     main->translate(0.0,0.0,-800.0);
   }
@@ -121,9 +129,9 @@ void Xwing::openWings(){
     rotRightUp  += 5.0;
     rotLeftDown -= 5.0;
     leftUpperNode->roll(Ogre::Degree(-5.0));
-    leftLowerNode->roll(Ogree::Degree(5.0));
+    leftLowerNode->roll(Ogre::Degree(5.0));
     rightUpperNode->roll(Ogre::Degree(5.0));
-    rightLowerNode->roll(Ogree::Degree(-5.0));
+    rightLowerNode->roll(Ogre::Degree(-5.0));
   }
 }
 
@@ -133,10 +141,10 @@ void Xwing::closeWings(){
     rotLeftDown -= 5.0;
     rotRightUp  -= 5.0;
     rotLeftDown += 5.0;
-    rotLeftUp->roll(Ogre::Degree(5.0));
-    rotLeftDown->roll(Ogree::Degree(-5.0));
-    rotRightUp->roll(Ogre::Degree(-5.0));
-    rotRightDown->roll(Ogree::Degree(5.0));
+    leftUpperNode->roll(Ogre::Degree(5.0));
+    leftLowerNode->roll(Ogre::Degree(-5.0));
+    rightUpperNode->roll(Ogre::Degree(-5.0));
+    rightLowerNode->roll(Ogre::Degree(5.0));
   }
 }
 
@@ -144,20 +152,22 @@ void Xwing::shootLaser(){
 
 }
 
-  //Private
-  //Body
+//Private
+//Body
 
 void Xwing::initBackBody(Ogre::SceneManager* _sceneManager){
-  backBodyNode = main->createChildSceneNode();
-  backBody = _sceneManager->createManualObject("backBody");
-
-  backBody->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
-
   float vertex0[3], vertex1[3], vertex2[3], vertex3[3], vertex4[3], vertex5[3], vertex6[3], vertex7[3];
   float vertex8[3], vertex9[3], vertex10[3], vertex11[3], vertex12[3], vertex13[3], vertex14[3], vertex15[3];
   float normal0[3], normal1[3], normal2[3], normal3[3], normal4[3], normal5[3], normal6[3], normal7[3];
   float normal8[3], normal9[3], normal10[3], normal11[3], normal12[3], normal13[3], normal14[3], normal15[3];
   float size;
+
+  backBodyNode = _sceneManager->createSceneNode();
+  main->addChild(backBodyNode);
+  backBody = _sceneManager->createManualObject("backBody");
+  backBodyNode->attachObject(backBody);
+
+  backBody->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 
   //Position of the vertexes
   vertex0[0] = 0.0;   //0
@@ -490,20 +500,20 @@ void Xwing::initBackBody(Ogre::SceneManager* _sceneManager){
   backBody->index(14);
 
   backBody->end();
-
-  backBodyNode->attachObject(backBody);
-
 }
 
 void Xwing::initFrontBody(Ogre::SceneManager* _sceneManager){
-  frontBodyNode = main->createChildSceneNode();
-  frontBody = _sceneManager->createManualObject("frontBody");
 
   float vertex0[3], vertex1[3], vertex2[3], vertex3[3], vertex4[3], vertex5[3], vertex6[3], vertex7[3];
   float vertex8[3], vertex9[3], vertex10[3], vertex11[3], vertex12[3], vertex13[3], vertex14[3], vertex15[3];
   float normal0[3], normal1[3], normal2[3], normal3[3], normal4[3], normal5[3], normal6[3], normal7[3];
   float normal8[3], normal9[3], normal10[3], normal11[3], normal12[3], normal13[3], normal14[3], normal15[3];
   float size;
+
+  frontBodyNode = _sceneManager->createSceneNode();
+  main->addChild(frontBodyNode);
+  frontBody = _sceneManager->createManualObject("frontBody");
+  frontBody->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 
   //Position of the vertexes
   vertex0[0] = 0.0;   //0
@@ -702,148 +712,149 @@ void Xwing::initFrontBody(Ogre::SceneManager* _sceneManager){
 
   //Vertexs of the left lower wing
   //Back vertexes
-  backBody->position(vertex0[0], vertex0[1], vertex0[2]);  //0
-  backBody->position(vertex1[0], vertex1[1], vertex1[2]);  //1
-  backBody->position(vertex2[0], vertex2[1], vertex2[2]);  //2
-  backBody->position(vertex3[0], vertex3[1], vertex3[2]);  //3
-  backBody->position(vertex4[0], vertex4[1], vertex4[2]);  //4
-  backBody->position(vertex5[0], vertex5[1], vertex5[2]);  //5
-  backBody->position(vertex6[0], vertex6[1], vertex6[2]);  //6
-  backBody->position(vertex7[0], vertex7[1], vertex7[2]);  //7
+  frontBody->position(vertex0[0], vertex0[1], vertex0[2]);  //0
+  frontBody->position(vertex1[0], vertex1[1], vertex1[2]);  //1
+  frontBody->position(vertex2[0], vertex2[1], vertex2[2]);  //2
+  frontBody->position(vertex3[0], vertex3[1], vertex3[2]);  //3
+  frontBody->position(vertex4[0], vertex4[1], vertex4[2]);  //4
+  frontBody->position(vertex5[0], vertex5[1], vertex5[2]);  //5
+  frontBody->position(vertex6[0], vertex6[1], vertex6[2]);  //6
+  frontBody->position(vertex7[0], vertex7[1], vertex7[2]);  //7
   //Front vertexes
-  backBody->position(vertex8[0], vertex8[1], vertex8[2]);     //8
-  backBody->position(vertex9[0], vertex9[1], vertex9[2]);     //9
-  backBody->position(vertex10[0], vertex10[1], vertex10[2]);  //10
-  backBody->position(vertex11[0], vertex11[1], vertex11[2]);  //11
-  backBody->position(vertex12[0], vertex12[1], vertex12[2]);  //12
-  backBody->position(vertex13[0], vertex13[1], vertex13[2]);  //13
-  backBody->position(vertex14[0], vertex14[1], vertex14[2]);  //14
-  backBody->position(vertex15[0], vertex15[1], vertex15[2]);  //15
+  frontBody->position(vertex8[0], vertex8[1], vertex8[2]);     //8
+  frontBody->position(vertex9[0], vertex9[1], vertex9[2]);     //9
+  frontBody->position(vertex10[0], vertex10[1], vertex10[2]);  //10
+  frontBody->position(vertex11[0], vertex11[1], vertex11[2]);  //11
+  frontBody->position(vertex12[0], vertex12[1], vertex12[2]);  //12
+  frontBody->position(vertex13[0], vertex13[1], vertex13[2]);  //13
+  frontBody->position(vertex14[0], vertex14[1], vertex14[2]);  //14
+  frontBody->position(vertex15[0], vertex15[1], vertex15[2]);  //15
 
   //Normal of the vertexes
   //Back normals
-  backBody->normal(normal0[0], normal0[1], normal0[2]);
-  backBody->normal(normal1[0], normal1[1], normal1[2]);
-  backBody->normal(normal2[0], normal2[1], normal2[2]);
-  backBody->normal(normal3[0], normal3[1], normal3[2]);
-  backBody->normal(normal4[0], normal4[1], normal4[2]);
-  backBody->normal(normal5[0], normal5[1], normal5[2]);
-  backBody->normal(normal6[0], normal6[1], normal6[2]);
-  backBody->normal(normal7[0], normal7[1], normal7[2]);
+  frontBody->normal(normal0[0], normal0[1], normal0[2]);
+  frontBody->normal(normal1[0], normal1[1], normal1[2]);
+  frontBody->normal(normal2[0], normal2[1], normal2[2]);
+  frontBody->normal(normal3[0], normal3[1], normal3[2]);
+  frontBody->normal(normal4[0], normal4[1], normal4[2]);
+  frontBody->normal(normal5[0], normal5[1], normal5[2]);
+  frontBody->normal(normal6[0], normal6[1], normal6[2]);
+  frontBody->normal(normal7[0], normal7[1], normal7[2]);
   //Front normals
-  backBody->normal(normal8[0], normal8[1], normal8[2]);
-  backBody->normal(normal9[0], normal9[1], normal9[2]);
-  backBody->normal(normal10[0], normal10[1], normal10[2]);
-  backBody->normal(normal11[0], normal11[1], normal11[2]);
-  backBody->normal(normal12[0], normal12[1], normal12[2]);
-  backBody->normal(normal13[0], normal13[1], normal13[2]);
-  backBody->normal(normal14[0], normal14[1], normal14[2]);
-  backBody->normal(normal15[0], normal15[1], normal15[2]);
+  frontBody->normal(normal8[0], normal8[1], normal8[2]);
+  frontBody->normal(normal9[0], normal9[1], normal9[2]);
+  frontBody->normal(normal10[0], normal10[1], normal10[2]);
+  frontBody->normal(normal11[0], normal11[1], normal11[2]);
+  frontBody->normal(normal12[0], normal12[1], normal12[2]);
+  frontBody->normal(normal13[0], normal13[1], normal13[2]);
+  frontBody->normal(normal14[0], normal14[1], normal14[2]);
+  frontBody->normal(normal15[0], normal15[1], normal15[2]);
 
   //Creating the triangles
   //BackFace
-  backBody->index(0);
-  backBody->index(2);
-  backBody->index(1);
-  backBody->index(0);
-  backBody->index(3);
-  backBody->index(2);
-  backBody->index(0);
-  backBody->index(4);
-  backBody->index(3);
-  backBody->index(0);
-  backBody->index(5);
-  backBody->index(4);
-  backBody->index(0);
-  backBody->index(6);
-  backBody->index(5);
-  backBody->index(0);
-  backBody->index(7);
-  backBody->index(6);
-  backBody->index(0);
-  backBody->index(1);
-  backBody->index(7);
+  frontBody->index(0);
+  frontBody->index(2);
+  frontBody->index(1);
+  frontBody->index(0);
+  frontBody->index(3);
+  frontBody->index(2);
+  frontBody->index(0);
+  frontBody->index(4);
+  frontBody->index(3);
+  frontBody->index(0);
+  frontBody->index(5);
+  frontBody->index(4);
+  frontBody->index(0);
+  frontBody->index(6);
+  frontBody->index(5);
+  frontBody->index(0);
+  frontBody->index(7);
+  frontBody->index(6);
+  frontBody->index(0);
+  frontBody->index(1);
+  frontBody->index(7);
   //FrontFace
-  backBody->index(8);
-  backBody->index(9);
-  backBody->index(10);
-  backBody->index(8);
-  backBody->index(10);
-  backBody->index(11);
-  backBody->index(8);
-  backBody->index(11);
-  backBody->index(12);
-  backBody->index(8);
-  backBody->index(12);
-  backBody->index(13);
-  backBody->index(8);
-  backBody->index(13);
-  backBody->index(14);
-  backBody->index(8);
-  backBody->index(14);
-  backBody->index(15);
-  backBody->index(8);
-  backBody->index(15);
-  backBody->index(9);
+  frontBody->index(8);
+  frontBody->index(9);
+  frontBody->index(10);
+  frontBody->index(8);
+  frontBody->index(10);
+  frontBody->index(11);
+  frontBody->index(8);
+  frontBody->index(11);
+  frontBody->index(12);
+  frontBody->index(8);
+  frontBody->index(12);
+  frontBody->index(13);
+  frontBody->index(8);
+  frontBody->index(13);
+  frontBody->index(14);
+  frontBody->index(8);
+  frontBody->index(14);
+  frontBody->index(15);
+  frontBody->index(8);
+  frontBody->index(15);
+  frontBody->index(9);
   //1
-  backBody->index(1);
-  backBody->index(10);
-  backBody->index(9);
-  backBody->index(1);
-  backBody->index(2);
-  backBody->index(10);
+  frontBody->index(1);
+  frontBody->index(10);
+  frontBody->index(9);
+  frontBody->index(1);
+  frontBody->index(2);
+  frontBody->index(10);
   //2
-  backBody->index(2);
-  backBody->index(11);
-  backBody->index(10);
-  backBody->index(2);
-  backBody->index(3);
-  backBody->index(11);
+  frontBody->index(2);
+  frontBody->index(11);
+  frontBody->index(10);
+  frontBody->index(2);
+  frontBody->index(3);
+  frontBody->index(11);
   //3
-  backBody->index(3);
-  backBody->index(12);
-  backBody->index(11);
-  backBody->index(3);
-  backBody->index(4);
-  backBody->index(12);
+  frontBody->index(3);
+  frontBody->index(12);
+  frontBody->index(11);
+  frontBody->index(3);
+  frontBody->index(4);
+  frontBody->index(12);
   //4
-  backBody->index(4);
-  backBody->index(13);
-  backBody->index(12);
-  backBody->index(4);
-  backBody->index(5);
-  backBody->index(13);
+  frontBody->index(4);
+  frontBody->index(13);
+  frontBody->index(12);
+  frontBody->index(4);
+  frontBody->index(5);
+  frontBody->index(13);
   //5
-  backBody->index(7);
-  backBody->index(9);
-  backBody->index(15);
-  backBody->index(7);
-  backBody->index(1);
-  backBody->index(9);
+  frontBody->index(7);
+  frontBody->index(9);
+  frontBody->index(15);
+  frontBody->index(7);
+  frontBody->index(1);
+  frontBody->index(9);
   //6
-  backBody->index(6);
-  backBody->index(15);
-  backBody->index(14);
-  backBody->index(6);
-  backBody->index(7);
-  backBody->index(15);
+  frontBody->index(6);
+  frontBody->index(15);
+  frontBody->index(14);
+  frontBody->index(6);
+  frontBody->index(7);
+  frontBody->index(15);
   //7 
-  backBody->index(5);
-  backBody->index(14);
-  backBody->index(13);
-  backBody->index(5);
-  backBody->index(6);
-  backBody->index(14);
+  frontBody->index(5);
+  frontBody->index(14);
+  frontBody->index(13);
+  frontBody->index(5);
+  frontBody->index(6);
+  frontBody->index(14);
    
-  backBody->end();
+  frontBody->end();
   frontBodyNode->attachObject(frontBody);
 }
 
 //Cabin Manual Object
 void Xwing::initCabin(Ogre::SceneManager* _sceneManager){
-  cabinNode = main->createChildSceneNode();
+  /*cabinNode = _sceneManager->createSceneNode();
+  main->addChild(cabinNode);
   cabin = _sceneManager->createManualObject("cabin");
-  cabinNode->attachObject(cabin);
+  cabinNode->attachObject(cabin);*/
 }
 
 //Wings
@@ -852,27 +863,28 @@ void Xwing::initLeftUpperWing(Ogre::SceneManager* _sceneManager){
   float normal0[3], normal1[3], normal2[3], normal3[3], normal4[3], normal5[3], normal6[3], normal7[3];
   float size;
 
-  leftUpperWingNode = leftUpperNode->createChildSceneNode();
+  leftUpperWingNode = _sceneManager->createSceneNode();
+  leftUpperNode->addChild(leftUpperWingNode);
   leftUpperWing = _sceneManager->createManualObject("leftUpperWing");
-
+  leftUpperWing->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
   //Position of the vertexes
-  vertex0[0] = 0;  //0
-  vertex0[1] = 0;
+  vertex0[0] = 0.0;  //0
+  vertex0[1] = 0.0;
   vertex0[2] = 0.0;
-  vertex1[0] = 0;  //1
-  vertex1[1] = 0;
+  vertex1[0] = 0.0;  //1
+  vertex1[1] = 0.0;
   vertex1[2] = -6.0;
-  vertex2[0] = 0;  //2
+  vertex2[0] = 0.0;  //2
   vertex2[1] = 0.4;
   vertex2[2] = 0.0;
-  vertex3[0] = 0;  //3
+  vertex3[0] = 0.0;  //3
   vertex3[1] = 0.4;
   vertex3[2] = -6.0;
   vertex4[0] = -8.7;  //4
-  vertex4[1] = 0;
+  vertex4[1] = 0.0;
   vertex4[2] = -2.0;
   vertex5[0] = -8.7;  //5
-  vertex5[1] = 0;
+  vertex5[1] = 0.0;
   vertex5[2] = -6.0;
   vertex6[0] = -8.7;  //6
   vertex6[1] = 0.4;
@@ -1027,12 +1039,14 @@ void Xwing::initLeftUpperWing(Ogre::SceneManager* _sceneManager){
 }
 
 void Xwing::initLeftLowerWing(Ogre::SceneManager* _sceneManager){
-  leftLowerWingNode = leftLowerNode->createChildSceneNode();
+  leftLowerWingNode = _sceneManager->createSceneNode();
+  leftLowerNode->addChild(leftLowerWingNode);
   leftLowerWing = _sceneManager->createManualObject("leftLowerWing");
 
   float vertex0[3], vertex1[3], vertex2[3], vertex3[3], vertex4[3], vertex5[3], vertex6[3], vertex7[3];
   float normal0[3], normal1[3], normal2[3], normal3[3], normal4[3], normal5[3], normal6[3], normal7[3];
   float size;
+  leftLowerWing->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 
   //Position of the vertexes
   vertex0[0] = -2.8;  //0
@@ -1210,9 +1224,11 @@ void Xwing::initRightUpperWing(Ogre::SceneManager* _sceneManager){
   float normal0[3], normal1[3], normal2[3], normal3[3], normal4[3], normal5[3], normal6[3], normal7[3];
   float size;
 
-  rightUpperWingNode = rightUpperNode->createChildSceneNode();
+  rightUpperWingNode = _sceneManager->createSceneNode();
+  rightUpperNode->addChild(rightUpperWingNode);
   rightUpperWing = _sceneManager->createManualObject("rightUpperWing");
-
+  rightUpperWing->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
+  
   //Position of the vertexes
   vertex0[0] = 11.5;  //0
   vertex0[1] = 0.1;
@@ -1389,9 +1405,11 @@ void Xwing::initRightLowerWing(Ogre::SceneManager* _sceneManager){
   float normal0[3], normal1[3], normal2[3], normal3[3], normal4[3], normal5[3], normal6[3], normal7[3];
   float size;
 
-  rightLowerWingNode = rightLowerNode->createChildSceneNode();
+  rightLowerWingNode = _sceneManager->createSceneNode();
+  rightLowerNode->addChild(rightLowerWingNode);
   rightLowerWing = _sceneManager->createManualObject("rightLowerWing");
-
+  rightLowerWing->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
+  
   //Position of the vertexes
   vertex0[0] = 11.5;  //0
   vertex0[1] = -0.1;
@@ -1577,109 +1595,134 @@ void Xwing::initRightLowerWing(Ogre::SceneManager* _sceneManager){
 
 //Engines
 void Xwing::initLeftUpperFrontEngine(Ogre::SceneManager* _sceneManager){
-  leftUpperFrontEngineNode = leftUpperNode->createChildSceneNode();
+  leftUpperFrontEngineNode = _sceneManager->createSceneNode();
+  leftUpperNode->addChild(leftUpperFrontEngineNode);
   leftUpperFrontEngine = _sceneManager->createEntity("leftUpperFrontEngine","usb_cilindro.mesh");
-  leftUpperFrontEngineNode->translate(-0.5f,0.45f,0.0f);
-  leftUpperFrontEngineNode->scale(0.1f,0.2f,0.2f);
+  leftUpperFrontEngineNode->translate(-1.0f,0.8f,0.0f);
+  leftUpperFrontEngineNode->scale(0.3f,0.3f,0.3f);
+  leftUpperFrontEngineNode->pitch(Ogre::Degree(90));
   leftUpperFrontEngineNode->attachObject(leftUpperFrontEngine);
 }
 
 void Xwing::initLeftLowerFrontEngine(Ogre::SceneManager* _sceneManager){
-  leftLowerFrontEngineNode = leftLowerNode->createChildSceneNode();
+  leftLowerFrontEngineNode = _sceneManager->createSceneNode();
+  leftLowerNode->addChild(leftLowerFrontEngineNode);
   leftLowerFrontEngine = _sceneManager->createEntity("leftLowerFrontEngine","usb_cilindro.mesh");
-  leftLowerFrontEngineNode->translate(-0.5f,-0.45f,0.0f);
-  leftLowerFrontEngineNode->scale(0.1f,0.2f,0.2f);
+  leftLowerFrontEngineNode->translate(-1.0f,-0.8f,0.0f);
+  leftLowerFrontEngineNode->scale(0.3f,0.3f,0.3f);
+  leftLowerFrontEngineNode->pitch(Ogre::Degree(90));
   leftLowerFrontEngineNode->attachObject(leftLowerFrontEngine);
 
 }
 
 void Xwing::initRightUpperFrontEngine(Ogre::SceneManager* _sceneManager){
-  rightUpperFrontEngineNode = rightUpperNode->createChildSceneNode();
+  rightUpperFrontEngineNode = _sceneManager->createSceneNode();
+  rightUpperNode->addChild(rightUpperFrontEngineNode);
   rightUpperFrontEngine = _sceneManager->createEntity("rightUpperFrontEngine","usb_cilindro.mesh");
-  rightUpperFrontEngineNode->translate(0.5f,0.45f,0.0f);
-  rightUpperFrontEngineNode->scale(0.1f,0.2f,0.2f);
+  rightUpperFrontEngineNode->translate(1.0f,0.8f,0.0f);
+  rightUpperFrontEngineNode->scale(0.3f,0.3f,0.3f);
+  rightUpperFrontEngineNode->pitch(Ogre::Degree(90));
   rightUpperFrontEngineNode->attachObject(rightUpperFrontEngine);
 
 }
 
-void Xwing::initLeftLowerFrontEngine(Ogre::SceneManager* _sceneManager){
-  rightLowerFrontEngineNode = rightLowerNode->createChildSceneNode();
+void Xwing::initRightLowerFrontEngine(Ogre::SceneManager* _sceneManager){
+  rightLowerFrontEngineNode = _sceneManager->createSceneNode();
+  rightLowerNode->addChild(rightLowerFrontEngineNode);
   rightLowerFrontEngine = _sceneManager->createEntity("rightLowerFrontEngine","usb_cilindro.mesh");
-  rightLowerFrontEngineNode->translate(0.5f,-0.45f,0.0f);
-  rightLowerFrontEngineNode->scale(0.1f,0.2f,0.2f);
+  rightLowerFrontEngineNode->translate(1.0f,-0.8f,0.0f);
+  rightLowerFrontEngineNode->scale(0.3f,0.3f,0.3f);
+  rightLowerFrontEngineNode->pitch(Ogre::Degree(90));
   rightLowerFrontEngineNode->attachObject(rightLowerFrontEngine);
 }
 
 void Xwing::initLeftUpperBackEngine(Ogre::SceneManager* _sceneManager){
-  leftUpperBackEngineNode = leftUpperNode->createChildSceneNode();
+  leftUpperBackEngineNode = _sceneManager->createSceneNode();
+  leftUpperNode->addChild(leftUpperBackEngineNode);
   leftUpperBackEngine = _sceneManager->createEntity("leftUpperBackEngine","usb_cilindro.mesh");
-  leftUpperBackEngineNode->translate(-0.3f,0.25f,-1.5f);
-  leftUpperBackEngineNode->scale(0.4f,0.4f,0.4f);
+  leftUpperBackEngineNode->translate(-1.0f,0.8f,1.5f);
+  leftUpperBackEngineNode->scale(0.2f,0.2f,0.2f);
+  leftUpperBackEngineNode->pitch(Ogre::Degree(90));
   leftUpperBackEngineNode->attachObject(leftUpperBackEngine);
 }
 
 void Xwing::initLeftLowerBackEngine(Ogre::SceneManager* _sceneManager){
-  leftLowerBackEngineNode = leftLowerNode->createChildSceneNode();
+  leftLowerBackEngineNode = _sceneManager->createSceneNode();
+  leftLowerNode->addChild(leftLowerBackEngineNode);
   leftLowerBackEngine = _sceneManager->createEntity("leftLowerBackEngine","usb_cilindro.mesh");
-  leftLowerBackEngineNode->translate(-0.3f,-0.25f,-1.5f);
-  leftLowerBackEngineNode->scale(0.4f,0.4f,0.4f);
+  leftLowerBackEngineNode->translate(-1.0f,-0.8f,1.5f);
+  leftLowerBackEngineNode->scale(0.2f,0.2f,0.2f);
+  leftLowerBackEngineNode->pitch(Ogre::Degree(90));
   leftLowerBackEngineNode->attachObject(leftLowerBackEngine);
 }
 
 void Xwing::initRightUpperBackEngine(Ogre::SceneManager* _sceneManager){
-  rightUpperBackEngineNode = rightUpperNode->createChildSceneNode();
+  rightUpperBackEngineNode = _sceneManager->createSceneNode();
+  rightUpperNode->addChild(rightUpperBackEngineNode);
   rightUpperBackEngine = _sceneManager->createEntity("rightUpperBackEngine","usb_cilindro.mesh");
-  rightUpperBackEngineNode->translate(0.3f,0.25f,-1.5f);
-  rightUpperBackEngineNode->scale(0.4f,0.4f,0.4f);
+  rightUpperBackEngineNode->translate(1.0f,0.8f,1.5f);
+  rightUpperBackEngineNode->scale(0.2f,0.2f,0.2f);
+  rightUpperBackEngineNode->pitch(Ogre::Degree(90));
   rightUpperBackEngineNode->attachObject(rightUpperBackEngine);
 }
 
 void Xwing::initRightLowerBackEngine(Ogre::SceneManager* _sceneManager){
-  rightLowerBackEngineNode = rightLowerNode->createChildSceneNode();
+  rightLowerBackEngineNode = _sceneManager->createSceneNode();
+  rightLowerNode->addChild(rightLowerBackEngineNode);
   rightLowerBackEngine = _sceneManager->createEntity("rightLowerBackEngine","usb_cilindro.mesh");
-  rightLowerBackEngineNode->translate(0.3f,-0.25f,-1.5f);
-  rightLowerBackEngineNode->scale(0.4f,0.4f,0.4f);
+  rightLowerBackEngineNode->translate(1.0f,-0.8f,1.5f);
+  rightLowerBackEngineNode->scale(0.2f,0.2f,0.2f);
+  rightLowerBackEngineNode->pitch(Ogre::Degree(90));
   rightLowerBackEngineNode->attachObject(rightLowerBackEngine);
 }
 
 //Cannons Entities
 void Xwing::initLeftUpperCannon(Ogre::SceneManager* _sceneManager){
-  leftUpperCannonNode = leftUpperNode->createChildSceneNode();
-  leftUpperCannon = _sceneManager->createEntity("leftUpperCannon","usb_cilindro02.mesh");
-  leftUpperCannonNode->translate(-8.7f,0.45f,0.0f);
-  leftUpperCannonNode->scale(0.1f,0.4f,0.1f);
+  leftUpperCannonNode = _sceneManager->createSceneNode();
+  leftUpperNode->addChild(leftUpperCannonNode);
+  leftUpperCannon = _sceneManager->createEntity("leftUpperCannon","usb_cilindro.mesh");
+  leftUpperCannonNode->translate(-8.7f,0.45f,-1.2f);
+  leftUpperCannonNode->scale(0.2f,1.2f,0.2f);
+  leftUpperCannonNode->pitch(Ogre::Degree(90));
   leftUpperCannonNode->attachObject(leftUpperCannon);
 }
 
 void Xwing::initLeftLowerCannon(Ogre::SceneManager* _sceneManager){
-  leftLowerCannonNode = leftLowerNode->createChildSceneNode();
-  leftLowerCannon = _sceneManager->createEntity("leftLowerCannon","usb_cilindro02.mesh");
-  leftLowerCannonNode->translate(-8.7f,-0.45f,0.0f);
-  leftLowerCannonNode->scale(0.1f,0.4f,0.1f);
+  leftLowerCannonNode = _sceneManager->createSceneNode();
+  leftLowerNode->addChild(leftLowerCannonNode);
+  leftLowerCannon = _sceneManager->createEntity("leftLowerCannon","usb_cilindro.mesh");
+  leftLowerCannonNode->translate(-8.7f,-0.45f,-1.2f);
+  leftLowerCannonNode->scale(0.2f,1.2f,0.2f);
+  leftLowerCannonNode->pitch(Ogre::Degree(90));
   leftLowerCannonNode->attachObject(leftLowerCannon);
 }
 
 void Xwing::initRightUpperCannon(Ogre::SceneManager* _sceneManager){
-  rightUpperCannonNode = rightUpperNode->createChildSceneNode();
-  rightUpperCannon = _sceneManager->createEntity("rightUpperCannon","usb_cilindro02.mesh");
-  rightUpperCannonNode->translate(8.7f,0.45f,0.0f);
-  rightUpperCannonNode->scale(0.1f,0.4f,0.1f);
+  rightUpperCannonNode = _sceneManager->createSceneNode();
+  rightLowerNode->addChild(rightUpperCannonNode);
+  rightUpperCannon = _sceneManager->createEntity("rightUpperCannon","usb_cilindro.mesh");
+  rightUpperCannonNode->translate(8.7f,0.45f,-1.2f);
+  rightUpperCannonNode->scale(0.2f,1.2f,0.2f);
+  rightUpperCannonNode->pitch(Ogre::Degree(90));
   rightUpperCannonNode->attachObject(rightUpperCannon);
 }
 
 void Xwing::initRightLowerCannon(Ogre::SceneManager* _sceneManager){
-  rightLowerCannonNode = rightLowerNode->createChildSceneNode();
-  rightLowerCannon = _sceneManager->createEntity("leftLowerCannon","usb_cilindro02.mesh");
-  rightLowerCannonNode->translate(8.7f,-0.45f,0.0f);
-  rightLowerCannonNode->scale(0.1f,0.4f,0.1f);
-  rightLowerCannonNode->attachObject(rightUpperCannon);
+  rightLowerCannonNode = _sceneManager->createSceneNode();
+  rightLowerNode->addChild(rightLowerCannonNode);
+  rightLowerCannon = _sceneManager->createEntity("rightLowerCannon","usb_cilindro.mesh");
+  rightLowerCannonNode->translate(8.7f,-0.45f,-1.2f);
+  rightLowerCannonNode->scale(0.2f,1.2f,0.2f);
+  rightLowerCannonNode->pitch(Ogre::Degree(90));
+  rightLowerCannonNode->attachObject(rightLowerCannon);
 }
 
 //Extra Entity()
 void Xwing::initR2d2(Ogre::SceneManager* _sceneManager){
-  r2d2Node = main->createChildSceneNode();
+  r2d2Node = _sceneManager->createSceneNode();
+  main->addChild(r2d2Node);
   r2d2 = _sceneManager->createEntity("r2d2","usb_dodecaedro.mesh");
+  r2d2Node->scale(0.15f,0.15f,0.15f);
+  r2d2Node->translate(0.0,2.5,-3.0);
   r2d2Node->attachObject(r2d2);
-  r2d2Node->scale(0.1f,0.1f,0.1f);
-  r2d2Node->translate(0.0,2.0,-3.0);
-}*/
+}

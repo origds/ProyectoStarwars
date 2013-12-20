@@ -1,4 +1,4 @@
-/*#include "Ogre/ogre.h"
+#include "Ogre/ogre.h"
 #include "OIS/ois.h"
 
 class Xwing
@@ -6,33 +6,65 @@ class Xwing
   float xpos, ypos, zpos;
   float rot, rotLeftUp, rotLeftDown, rotRightUp, rotRightDown;
   //Body Nodes
-  Ogre::SceneNode* main, backBodyNode, frontBodyNode, cabinNode;
+  Ogre::SceneNode* main;
+  Ogre::SceneNode* backBodyNode; 
+  Ogre::SceneNode* frontBodyNode;
+  Ogre::SceneNode* cabinNode;
   //Rotating Nodes for Wings
-  Ogre::SceneNode* leftUpperNode, leftLowerNode, rightUpperNode, rightLowerNode;
+  Ogre::SceneNode* leftUpperNode;
+  Ogre::SceneNode* leftLowerNode;
+  Ogre::SceneNode* rightUpperNode;
+  Ogre::SceneNode* rightLowerNode;
   //Wings Nodes
-  Ogre::SceneNode* leftUpperWingNode, leftLowerWingNode;
-  Ogre::SceneNode* rightUpperWingNode, rightLowerWingNode;
+  Ogre::SceneNode* leftUpperWingNode;
+  Ogre::SceneNode* leftLowerWingNode;
+  Ogre::SceneNode* rightUpperWingNode;
+  Ogre::SceneNode* rightLowerWingNode;
   //Engines Nodes
-  Ogre::SceneNode* leftUpperFrontEngineNode, leftLowerFrontEngineNode, rightUpperFrontEngineNode, rightLowerFrontEngineNode;
-  Ogre::SceneNode* leftUpperBackEngineNode, leftLowerBackEngineNode, rightUpperBackEngineNode, rightLowerBackEngineNode;
+  Ogre::SceneNode* leftUpperFrontEngineNode;
+  Ogre::SceneNode* leftLowerFrontEngineNode;
+  Ogre::SceneNode* rightUpperFrontEngineNode;
+  Ogre::SceneNode* rightLowerFrontEngineNode;
+  Ogre::SceneNode* leftUpperBackEngineNode;
+  Ogre::SceneNode* leftLowerBackEngineNode;
+  Ogre::SceneNode* rightUpperBackEngineNode;
+  Ogre::SceneNode* rightLowerBackEngineNode;
   //Cannons Nodes
-  Ogre::SceneNode* leftUpperCannonNode, leftLowerCannonNode, rightUpperCannonNode, leftLowerCannonNode;
+  Ogre::SceneNode* leftUpperCannonNode;
+  Ogre::SceneNode* leftLowerCannonNode;
+  Ogre::SceneNode* rightUpperCannonNode;
+  Ogre::SceneNode* rightLowerCannonNode;
   //Extra Node
   Ogre::SceneNode* r2d2Node;
   
   //Body Manual Objects
-  Ogre::ManualObject* backBody, frontBody, cabin;
+  Ogre::ManualObject* backBody;
+  Ogre::ManualObject* frontBody;
+  Ogre::ManualObject* cabin;
   //Wings Manual Objects
-  Ogre::ManualObject* leftUpperWing, leftLowerWing, rightUpperWing, rightLowerWing;
+  Ogre::ManualObject* leftUpperWing;
+  Ogre::ManualObject* leftLowerWing;
+  Ogre::ManualObject* rightUpperWing;
+  Ogre::ManualObject* rightLowerWing;
   //Engines Entities
-  Ogre::Entity* leftUpperFrontEngine, leftLowerFrontEngine, rightUpperFrontEngine, rightLowerFrontEngine;
-  Ogre::Entity* leftUpperBackEngine, leftLowerBackEngine, rightUpperBackEngine, rightLowerBackEngine;
+  Ogre::Entity* leftUpperFrontEngine;
+  Ogre::Entity* leftLowerFrontEngine;
+  Ogre::Entity* rightUpperFrontEngine;
+  Ogre::Entity* rightLowerFrontEngine;
+  Ogre::Entity* leftUpperBackEngine;
+  Ogre::Entity* leftLowerBackEngine;
+  Ogre::Entity* rightUpperBackEngine;
+  Ogre::Entity* rightLowerBackEngine;
   //Cannons Entities
-  Ogre::Entity* leftUpperCannon, leftLowerCannon, rightUpperCannon, leftLowerCannon;
+  Ogre::Entity* leftUpperCannon;
+  Ogre::Entity* leftLowerCannon;
+  Ogre::Entity* rightUpperCannon;
+  Ogre::Entity* rightLowerCannon;
   //Extra Entity
   Ogre::Entity* r2d2;
 
 public:
+  Xwing();
   Xwing(float x, float y, float z, Ogre::SceneManager* _sceneManager);
   ~Xwing();
 
@@ -76,4 +108,4 @@ private:
   void initRightLowerCannon(Ogre::SceneManager* _sceneManager);
   //Extra Entity()
   void initR2d2(Ogre::SceneManager* _sceneManager);
-};*/
+};

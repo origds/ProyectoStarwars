@@ -1,6 +1,7 @@
 #include "Ogre\Ogre.h"
 #include "OIS\OIS.h"
 #include "torreta.h"
+#include "xwing.h"
 
 class AppFrameListener : public Ogre::FrameListener
 {
@@ -197,6 +198,8 @@ class cAplicacion {
 		Torreta torre4 = Torreta(0.0, 0.0, 0.0, 22.0, -7.0, -883.0);
 		torre4.initTorreta4(_sceneManager);
 
+		//Nave
+		Xwing nave = Xwing(0.0, 0.0, 0.0, _sceneManager);
 		// Luz
 
 		_sceneManager->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
